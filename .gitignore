@@ -1,3 +1,7 @@
+
+*\.ignore
+*.sensitive.*
+
 # Logs
 logs
 *.log
