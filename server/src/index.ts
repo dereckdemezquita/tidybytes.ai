@@ -4,7 +4,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-import authRouter from './auth';
+import authRouter from './routes/auth';
 import uploadRouter from './routes/uploadTab';
 
 dotenv.config();
