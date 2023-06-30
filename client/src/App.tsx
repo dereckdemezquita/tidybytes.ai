@@ -1,47 +1,30 @@
 // client/src/App.tsx
 
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LandingPage from './LandingPage';
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import AppRoutes from './AppRoutes';
 import Login from './components/Login';
 import Register from './components/Register';
-import Dashboard from './Dashboard';  // import Dashboard component
 import Modal from './components/Modal';
 import GlobalStyle from './GlobalStyles';
+import useModal from './hooks/useModal'
 
 const App: React.FC = () => {
-    const [showLoginForm, setShowLoginForm] = useState(false);
-    const [showRegisterForm, setShowRegisterForm] = useState(false);
-
-    useEffect(() => {
-        fetch('/api/test')
-            .then(response => response.json())
-            .then(data => console.log(data));
-    }, []);
+    const loginModal = useModal();
+    const registerModal = useModal();
 
     return (
         <Router>
             <GlobalStyle />
-            <Routes>
-                <Route 
-                    path="/" 
-                    element={
-                        <LandingPage 
-                            setShowLoginForm={setShowLoginForm}
-                            setShowRegisterForm={setShowRegisterForm}
-                        />
-                    }
-                />
-                <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-            {showLoginForm && 
-                <Modal onClose={() => setShowLoginForm(false)}>
-                    <Login onClose={() => setShowLoginForm(false)} />
+            <AppRoutes showLoginModal={loginModal.toggle} showRegisterModal={registerModal.toggle}/>
+            {loginModal.isVisible &&
+                <Modal onClose={loginModal.toggle}>
+                    <Login onClose={loginModal.toggle} />
                 </Modal>
             }
-            {showRegisterForm && 
-                <Modal onClose={() => setShowRegisterForm(false)}>
-                    <Register onClose={() => setShowRegisterForm(false)} />
+            {registerModal.isVisible &&
+                <Modal onClose={registerModal.toggle}>
+                    <Register onClose={registerModal.toggle} />
                 </Modal>
             }
         </Router>

@@ -101,13 +101,15 @@ const Register: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             <Form onSubmit={handleSubmit}>
                 <Input 
                     type="text" 
-                    placeholder="First Name" 
+                    autoComplete="given-name"
+                    placeholder="First Name"
                     value={firstName} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)} 
                     required 
                 />
                 <Input 
-                    type="text" 
+                    type="text"
+                    autoComplete="family-name"
                     placeholder="Last Name" 
                     value={lastName} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)} 
@@ -115,6 +117,7 @@ const Register: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 />
                 <Input 
                     type="email" 
+                    name="email"
                     placeholder="Email" 
                     value={email} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -125,9 +128,10 @@ const Register: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     required 
                 />
                 <Input 
-                    type="text" 
-                    placeholder="Username" 
-                    value={username} 
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={username}
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         setUsername(e.target.value);
                         setError('');
@@ -136,14 +140,16 @@ const Register: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     required 
                 />
                 <Input 
-                    type="password" 
+                    type="password"
+                    name="password"
                     placeholder="Password" 
                     value={password} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
                     required 
                 />
                 <Input 
-                    type="password" 
+                    type="password"
+                    name="confirmPassword"
                     placeholder="Confirm Password" 
                     value={confirmPassword} 
                     onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)} 

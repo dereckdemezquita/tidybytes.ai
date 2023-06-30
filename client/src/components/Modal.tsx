@@ -32,6 +32,7 @@ const CloseButton = styled.button`
     background: transparent;
     border: none;
     font-size: 1.4em;
+    cursor: pointer;
 `;
 
 interface ModalProps {

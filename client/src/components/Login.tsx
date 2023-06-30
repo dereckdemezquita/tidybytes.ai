@@ -65,18 +65,20 @@ const Login: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     return (
         <Form onSubmit={handleSubmit}>
             <Input 
-                type="email" 
+                type="email"
+                name="email"
                 placeholder="Email" 
-                value={email} 
+                value={email}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)} 
-                required 
+                required
             />
             <Input 
-                type="password" 
-                placeholder="Password" 
-                value={password} 
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)} 
-                required 
+                required
             />
             <Button type="submit">Login</Button>
         </Form>
