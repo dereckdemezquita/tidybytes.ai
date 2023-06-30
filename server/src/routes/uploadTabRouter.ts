@@ -7,7 +7,6 @@ import XLSX from 'xlsx';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 import { promises as fs } from 'fs';
-import path from 'path';
 
 const router = express.Router();
 
