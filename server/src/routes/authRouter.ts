@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('user', userSchema, 'users');
 
 router.post('/api/login', async (req, res) => {
     const { email, password } = req.body;
@@ -46,7 +46,7 @@ router.post('/api/login', async (req, res) => {
     }
 });
 
-router.get('/api/checkEmail', async (req, res) => {
+router.get('/api/validate_register_email', async (req, res) => {
     const { email } = req.query;
     try {
         const existingUser = await User.findOne({ email });
@@ -60,7 +60,7 @@ router.get('/api/checkEmail', async (req, res) => {
     }
 });
 
-router.get('/api/checkUsername', async (req, res) => {
+router.get('/api/validate_register_username', async (req, res) => {
     const { username } = req.query;
     try {
         const existingUser = await User.findOne({ username });
@@ -111,6 +111,35 @@ router.post('/api/register', async (req, res) => {
         return res.status(200).json({ success: true, token });
     } catch (error) {
         console.error(error);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+});
+
+router.get('/api/dashboard/get_user_data', async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Assumes 'Bearer TOKEN'
+
+    if (!token) {
+        return res.status(401).json({ success: false, message: 'No token provided' });
+    }
+
+    try {
+        const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
+
+        const user = await User.findById(decodedToken._id).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        return res.status(200).json({ success: true, user });
+    } catch (error) {
+        console.error(error);
+
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({ success: false, message: 'Invalid token' });
+        }
+
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
