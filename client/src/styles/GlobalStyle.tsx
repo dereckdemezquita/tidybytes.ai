@@ -23,22 +23,16 @@ const GlobalStyle = createGlobalStyle`
 
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Montserrat', sans-serif;
-        color: #444;
+        color: ${theme.colors.primary};
     }
 
     a {
-        color: #007bff;
+        color: ${theme.colors.anchor};
 
     }
 
     a:hover {
-        color: #0056b3;
-    }
-
-    .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 0 auto;
+        color: ${theme.colors.anchorHover};
     }
 `;
 

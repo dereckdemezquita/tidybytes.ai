@@ -19,6 +19,8 @@ export const theme = {
         accent3: '#F27121',
         accent4: '#FBBD08',
         accent5: '#B5CC18',
+        anchor: '#106BA3',
+        anchorHover: '#253238',
     },
     fonts: {
         primary: 'Roboto, sans-serif',
