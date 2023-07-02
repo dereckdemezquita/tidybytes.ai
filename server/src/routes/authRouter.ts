@@ -115,7 +115,19 @@ router.post('/api/register', async (req, res) => {
     }
 });
 
-router.get('/api/dashboard/get_user_data', async (req, res) => {
+router.get('/api/dashboard/get_user_data', authenticateJWT, async (req: express.Request, res) => {
+    const user = await User.findById(req.user!._id).select('-password'); // req.user is now available thanks to the middleware
+
+    if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    return res.status(200).json({ success: true, user });
+});
+
+export default router;
+
+function authenticateJWT(req: express.Request, res, next: express.NextFunction) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1]; // Assumes 'Bearer TOKEN'
 
@@ -126,13 +138,8 @@ router.get('/api/dashboard/get_user_data', async (req, res) => {
     try {
         const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
 
-        const user = await User.findById(decodedToken._id).select('-password');
+        req.user = decodedToken;  // Store the user's details for use in the route handler
 
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        return res.status(200).json({ success: true, user });
     } catch (error) {
         console.error(error);
 
@@ -142,6 +149,6 @@ router.get('/api/dashboard/get_user_data', async (req, res) => {
 
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
-});
 
-export default router;
+    next();  // Move to the next middleware or route handler
+}
