@@ -1,6 +1,5 @@
-// client/src/GlobalStyles.tsx
-
 import { createGlobalStyle } from 'styled-components';
+import { theme } from './theme';
 import reset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
@@ -18,8 +17,8 @@ const GlobalStyle = createGlobalStyle`
 
     body {
         font-family: 'Open Sans', sans-serif;
-        background-color: #f6f7fb;
-        color: #333;
+        background-color: ${theme.colors.background};
+        color: #242424;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -29,7 +28,7 @@ const GlobalStyle = createGlobalStyle`
 
     a {
         color: #007bff;
-        text-decoration: none;
+
     }
 
     a:hover {

@@ -1,28 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-const useModal = () => {
-    const [isVisible, setIsVisible] = useState(false);
+type Modal = 'register' | 'login' | null;
 
-    const toggle = () => {
-        setIsVisible(!isVisible);
-    }
+export const useModal = () => {
+    const [modal, setModal] = useState<Modal>(null);
 
-    const keyListener = (e: KeyboardEvent) => {
-        if (e.code === 'Escape') {
-            setIsVisible(false);
-        }
-    }
+    const openModal = (modal: Modal) => setModal(modal);
+    const closeModal = () => setModal(null);
 
-    useEffect(() => {
-        window.addEventListener('keydown', keyListener);
-
-        return () => window.removeEventListener('keydown', keyListener);
-    }, []);
-
-    return {
-        isVisible,
-        toggle
-    }
+    return { modal, openModal, closeModal };
 };
-
-export default useModal;
