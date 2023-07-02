@@ -18,7 +18,7 @@ export const LoginForm = () => {
     const [formError, setFormError] = useState<string>("");
 
     const dispatch = useDispatch();
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -32,13 +32,14 @@ export const LoginForm = () => {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-    
+
         try {
             console.log("Attempting login...");
             const response: AxiosResponse = await axios.post('/api/login', user);
             console.log("Login successful, received response:", response);
-            
-            if(response.data && response.data.user) {
+
+            if (response.data && response.data.success) {
+                localStorage.setItem('token', response.data.token);
                 dispatch(setUserData(response.data.user));
             }
 
@@ -90,13 +91,13 @@ export const RegistrationForm = () => {
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
         const key = id.split('-')[0]; // this will map the input's id to the correct key in our state
-    
+
         setUser(prevUser => ({
             ...prevUser,
             [key]: value,
         }));
     };
-    
+
 
     const checkUsernameAvailability = async () => {
         try {
@@ -131,7 +132,7 @@ export const RegistrationForm = () => {
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
-    
+
         try {
             const response: AxiosResponse = await axios.post('/api/register', user);
         } catch (error: any) {

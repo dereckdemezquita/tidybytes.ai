@@ -8,6 +8,8 @@ import styled, { keyframes } from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import * as helpers from '../modules/helpers';
+
 
 const fadeInRight = keyframes`
     0% {
@@ -90,7 +92,8 @@ const ButtonGroup = styled.div`
 
 export const LandingPage = () => {
     const { modal, openModal, closeModal } = useModal();
-    const user = useSelector((state: any) => state.user);
+    const isLoggedIn = helpers.isUserLoggedIn();
+    console.log(`isLoggedIn: ${isLoggedIn}`);
     const navigate = useNavigate();
 
     return (
@@ -104,8 +107,14 @@ export const LandingPage = () => {
             </Section>
             <Section>
                 <ButtonGroup>
-                    <Button onClick={() => user ? navigate('/dashboard') : openModal('register')}>Register</Button>
-                    <Button intent={user ? "success" : "none"} onClick={() => user ? navigate('/dashboard') : openModal('login')}>Login</Button>
+                    {isLoggedIn ? 
+                        <Button intent="success" onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+                        :
+                        <>
+                            <Button onClick={() => openModal('register')}>Register</Button>
+                            <Button onClick={() => openModal('login')}>Login</Button>
+                        </>
+                    }
                 </ButtonGroup>
             </Section>
             {modal === 'register' && (

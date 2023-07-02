@@ -1,4 +1,4 @@
-import { SET_USER_DATA } from './actions';
+import { SET_USER_DATA, UNSET_USER_DATA } from './actions';
 
 const initialState = {
     user: null
@@ -16,6 +16,11 @@ export const appReducer = (state = initialState, action: ActionType) => {
             return {
                 ...state,
                 user: action.payload
+            };
+        case UNSET_USER_DATA:
+            return {
+                ...state,
+                user: null
             };
         default:
             return state;
