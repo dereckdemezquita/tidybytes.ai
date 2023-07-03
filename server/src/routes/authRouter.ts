@@ -125,6 +125,10 @@ router.get('/api/dashboard/get_user_data', authenticateJWT, async (req: express.
     return res.status(200).json({ success: true, user });
 });
 
+router.get('/api/validate_token', authenticateJWT, async (req: express.Request, res) => {
+    return res.status(200).json({ success: true });
+});
+
 export default router;
 
 function authenticateJWT(req: express.Request, res, next: express.NextFunction) {
