@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { isUserLoggedIn } from '../modules/helpers';
 
 interface ProtectedRouteProps {
     children: React.ReactElement;
@@ -9,18 +9,26 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const token = localStorage.getItem('token');
 
-    // If there is no token (i.e., user is not authenticated), navigate to the landing page ('/')
+    const [authStatus, setAuthStatus] = useState<boolean | null>(null);
+
     useEffect(() => {
-        if (!token) {
-            navigate("/");
-        }
-    }, [token, navigate]);
+        const checkAuth = async () => {
+            const isLoggedIn = await isUserLoggedIn();
+            if (!isLoggedIn) {
+                navigate("/");
+            } else {
+                setAuthStatus(isLoggedIn);
+            }
+        };
+        checkAuth();
+    }, [navigate]);
 
-    // If user is authenticated (i.e., there is a token), render the protected components (children)
-    // If not, redirect them to the landing page, keeping note of the current location they were trying to access
-    return token ? children : <Navigate to="/" state={{ from: location }} replace />;
+    if (authStatus === null) {
+        return null;
+    }
+
+    return authStatus ? children : <Navigate to="/" state={{ from: location }} replace />;
 };
 
 export default ProtectedRoute;

@@ -1,15 +1,11 @@
-import React from 'react';
-// import { Button } from '../components/base/Button';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@blueprintjs/core';
 import { Modal } from '../components/base/Modal';
 import { LoginForm, RegistrationForm } from '../components/base/AuthForms';
-import { useModal } from '../hooks/useModal';
+import { useAuthModal } from '../hooks/useAuthModal';
 import styled, { keyframes } from 'styled-components';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
-import * as helpers from '../modules/helpers';
-
+import { isUserLoggedIn } from '../modules/helpers';
 
 const fadeInRight = keyframes`
     0% {
@@ -32,7 +28,6 @@ const fadeInUp = keyframes`
         transform: translateY(0);
     }
 `;
-
 
 const Container = styled.div`
     display: flex;
@@ -66,7 +61,6 @@ const Subtitle = styled.h2`
     animation: ${fadeInUp} 1s ease-out;
 `;
 
-
 const Description = styled.section`
     color: #6c757d;
     font-size: 1.2em;
@@ -91,10 +85,17 @@ const ButtonGroup = styled.div`
 `;
 
 export const LandingPage = () => {
-    const { modal, openModal, closeModal } = useModal();
-    const isLoggedIn = helpers.isUserLoggedIn();
-    console.log(`isLoggedIn: ${isLoggedIn}`);
+    const { modal, openModal, closeModal } = useAuthModal();
     const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedin] = useState<boolean>(false);
+
+    useEffect(() => {
+        const checkLoginStatus = async () => {
+            const loggedIn = await isUserLoggedIn();
+            setIsLoggedin(loggedIn);
+        };
+        checkLoginStatus();
+    }, []);
 
     return (
         <Container>
@@ -107,13 +108,14 @@ export const LandingPage = () => {
             </Section>
             <Section>
                 <ButtonGroup>
-                    {isLoggedIn ? 
-                        <Button intent="success" onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
-                        :
-                        <>
-                            <Button onClick={() => openModal('register')}>Register</Button>
-                            <Button onClick={() => openModal('login')}>Login</Button>
-                        </>
+                    {
+                        isLoggedIn ?
+                            <Button intent="success" onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
+                            :
+                            <>
+                                <Button onClick={() => openModal('register')}>Register</Button>
+                                <Button onClick={() => openModal('login')}>Login</Button>
+                            </>
                     }
                 </ButtonGroup>
             </Section>

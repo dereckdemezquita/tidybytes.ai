@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 type Modal = 'register' | 'login' | null;
 
-export const useModal = () => {
+export const useAuthModal = () => {
     const [modal, setModal] = useState<Modal>(null);
 
     const openModal = (modal: Modal) => setModal(modal);
