@@ -1,19 +1,11 @@
-// server/src/auth.ts
-
-import express from 'express';
+import express, { Request } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
+import { userSchema } from '../models/user';
+import { authJWT } from '../middleware/authJWT';
 
 const router = express.Router();
-
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-});
 
 const User = mongoose.model('user', userSchema, 'users');
 
@@ -115,44 +107,9 @@ router.post('/api/register', async (req, res) => {
     }
 });
 
-router.get('/api/dashboard/get_user_data', authenticateJWT, async (req: express.Request, res) => {
-    const user = await User.findById(req.user!._id).select('-password'); // req.user is now available thanks to the middleware
-
-    if (!user) {
-        return res.status(404).json({ success: false, message: 'User not found' });
-    }
-
-    return res.status(200).json({ success: true, user });
-});
-
-router.get('/api/validate_token', authenticateJWT, async (req: express.Request, res) => {
+// ------------------------
+router.get('/api/validate_token', authJWT, async (req: Request, res) => {
     return res.status(200).json({ success: true });
 });
 
 export default router;
-
-function authenticateJWT(req: express.Request, res, next: express.NextFunction) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Assumes 'Bearer TOKEN'
-
-    if (!token) {
-        return res.status(401).json({ success: false, message: 'No token provided' });
-    }
-
-    try {
-        const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
-
-        req.user = decodedToken;  // Store the user's details for use in the route handler
-
-    } catch (error) {
-        console.error(error);
-
-        if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(401).json({ success: false, message: 'Invalid token' });
-        }
-
-        return res.status(500).json({ success: false, message: 'Internal server error' });
-    }
-
-    next();  // Move to the next middleware or route handler
-}

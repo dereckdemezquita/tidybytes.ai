@@ -5,13 +5,15 @@ import dotenv from 'dotenv';
 
 const port: number = 5001;
 
-import authRouter from './routes/authRouter';
+import auth from './routes/auth';
+import dashboard from './routes/dashboard';
 
 dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(authRouter);
+app.use(auth);
+app.use(dashboard);
 
 mongoose.connect(process.env.MONGODB_URI!)
     .then(() => console.log('Connected to MongoDB'))
