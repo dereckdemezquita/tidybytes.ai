@@ -8,7 +8,6 @@ export const theme = {
         info: '#106BA3',
         text: '#253238',
         mutedText: '#5C7080',
-        background: '#FDFDFD',
         overlay: 'rgba(16, 22, 26, 0.7)',
         buttonPrimary: '#106BA3',
         buttonSecondary: '#F5F8FA',
@@ -21,6 +20,13 @@ export const theme = {
         accent5: '#B5CC18',
         anchor: '#106BA3',
         anchorHover: '#253238',
+        background: { // FDFDFD
+            primary: '#F5F8FA',
+            secondary: '#FFFFFF',
+            tertiary: '#FDFDFD',
+            offWhite: '#F8F9FA',
+            darkGray: '#343A40',
+        }
     },
     fonts: {
         primary: 'Roboto, sans-serif',
