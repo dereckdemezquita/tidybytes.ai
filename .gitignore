@@ -21,6 +21,7 @@ deprecated/
 out
 dist
 build
+.next
 
 # misc
 .DS_Store
